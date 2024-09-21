@@ -1,0 +1,6 @@
+@InTouch.TaskService.Api_HostAddress = http://localhost:5068
+
+GET {{InTouch.TaskService.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

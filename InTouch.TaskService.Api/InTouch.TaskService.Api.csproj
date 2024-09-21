@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InTouch.TaskService.BLL.Logic.Contracts\InTouch.TaskService.BLL.Logic.Contracts.csproj" />
+    <ProjectReference Include="..\InTouch.TaskService.BLL.Logic\InTouch.TaskService.BLL.Logic.csproj" />
+    <ProjectReference Include="..\InTouch.TaskService.DAL.Repository.Contracts\InTouch.TaskService.DAL.Repository.Contracts.csproj" />
+    <ProjectReference Include="..\InTouch.TaskService.Repository\InTouch.TaskService.DAL.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
