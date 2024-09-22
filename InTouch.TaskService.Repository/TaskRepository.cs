@@ -1,5 +1,6 @@
 ﻿using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
+using InTouch.TaskService.Common.Entities.TaskModels.UpdateModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -19,20 +20,17 @@ namespace InTouch.TaskService.DAL.Repository
 
         public async Task PostAsync(TaskModel model)
         {
+            
             try
             {
-                var sql = "CALL public.post_task(@_name, @_description, @_type, @_status, @_createdat, @_updateddate, @_enddate, @_author, @_executor)";
+                var sql = "CALL public.post_task(@_name, @_description, @_enddate, @_author, @_executors)";
                 var param = new
                 {
                     _name = model.Name,
                     _description = model.Description,
-                    _type = model.Type,
-                    _status = model.Status,
-                    _createdat = model.CreatedDate,
-                    _updateddate = model.UpdatedDate,
                     _enddate = model.EndDate,
                     _author = model.Author,
-                    _executor = model.Executor
+                    _executors = model.Executors
                 };
 
                 await ExecuteAsync(sql, param);
@@ -46,21 +44,21 @@ namespace InTouch.TaskService.DAL.Repository
             }
         }
         
-        public async Task<TaskModel> GetAsync(Guid taskId)
+        public async Task<TaskModel> GetAsync(Guid id)
         {
             try
             {
-                var sql = "SELECT * FROM public.get_task(@_taskid)";
+                var sql = "SELECT * FROM public.get_task(@_id)";
                 var param = new
                 {
-                    _taskid = taskId
+                    _id = id
                 };
 
                 return await QuerySingleAsync<TaskModel>(sql, param);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"There no Task with this id {taskId}");
+                _logger.LogError($"There no Task with this id {id}");
                 throw;
             }
         }
@@ -76,19 +74,20 @@ namespace InTouch.TaskService.DAL.Repository
             }
         }
 
-        public async Task UpdateAsync(TaskInputModel model, Guid taskId)
+        public async Task UpdateAsync(TaskUpdateModel model, Guid taskId)
         {
             try
             {
                 var sql =
-                    "CALL public.update_task(@_name, @_description, @_type, @_status, @_executor, @_taskid)";
+                    "CALL public.update_task(@_name, @_description, @_type, @_status, @_executors, @_enddate, @_taskid)";
                 var param = new
                 {
                     _name = model.Name,
                     _description = model.Description,
                     _type = model.Type,
                     _status = model.Status,
-                    _executor = model.Executor,
+                    _executors = model.Executors,
+                    _enddate = model.EndDate.ToLocalTime(),
                     _taskid = taskId
                 };
             
@@ -105,10 +104,10 @@ namespace InTouch.TaskService.DAL.Repository
         {
             try
             {
-                var sql = "CALL public.delete_task(@_taskid)";
+                var sql = "CALL public.delete_task(@_id)";
                 var param = new
                 {
-                    _taskid = taskId
+                    _id = taskId
                 };
                 
                 await ExecuteAsync(sql, param);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InTouch.TaskService.Common.Entities.Enums
 {
-    public enum Statuses
+    public enum TaskStatuses
     {
         ToDo = 1,
         InProgress,

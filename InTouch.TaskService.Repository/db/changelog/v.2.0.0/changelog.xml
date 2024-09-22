@@ -4,7 +4,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    
-    <include file="v.2.0.0/changelog.xml" relativeToChangelogFile="true"/>
+
+    <changeSet id="add-tag-2.0.0" author="Val">
+        <tagDatabase tag="v.2.0.0"/>
+    </changeSet>
+
+    <include file="create-table-tasks.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-subtasks.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

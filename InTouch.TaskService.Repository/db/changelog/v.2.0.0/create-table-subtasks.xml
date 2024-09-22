@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+    
+    <changeSet id="create-subtasks.v1" author="Val">
+        <createTable tableName="subtasks">
+            <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="basedon" type="uuid">
+                <constraints nullable="false" foreignKeyName="subtasks_basedon_tasks.v1_id" references="tasksv1(id)" 
+                             deleteCascade="true"/>
+            </column>
+            <column name="name" type="varchar(20) ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdat" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedat" type="timestamp"/>
+            <column name="enddate" type="timestamp"/>
+            <column name="author" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="executors" type="uuid[]"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

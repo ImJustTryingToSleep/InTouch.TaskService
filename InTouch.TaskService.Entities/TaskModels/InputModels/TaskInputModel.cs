@@ -11,9 +11,6 @@ namespace InTouch.TaskService.Common.Entities.TaskModels.InputModels
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Type { get; set; }
-        public Statuses Status { get; set; }
-        public string Author { get; set; }
-        public string Executor { get; set; }
+        public Guid AuthorId { get; set; }
     }
 }

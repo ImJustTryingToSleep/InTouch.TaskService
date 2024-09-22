@@ -1,5 +1,5 @@
-using InTouch.TaskService.Api.Config;
 using InTouch.TaskService.Api.Extensions;
+using InTouch.TaskService.BLL.Logic.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 

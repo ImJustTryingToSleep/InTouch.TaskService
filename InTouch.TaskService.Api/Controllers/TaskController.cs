@@ -2,6 +2,7 @@
 using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
+using InTouch.TaskService.Common.Entities.TaskModels.UpdateModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InTouch.TaskService.Api.Controllers
@@ -39,12 +40,11 @@ namespace InTouch.TaskService.Api.Controllers
             }
         }
         
-        
         [HttpPut]
         [Route("updateTask")]
-        public async Task Put(Guid id, [FromBody] TaskInputModel task)
+        public async Task Put(Guid id, [FromBody] TaskUpdateModel model)
         {
-            await _taskLogic.UpdateAsync(task, id);
+            await _taskLogic.UpdateAsync(model, id);
         }
 
         
