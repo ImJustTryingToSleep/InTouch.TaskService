@@ -6,8 +6,9 @@ namespace InTouch.TaskService.BLL.Logic.Contracts
 {
     public interface ITaskLogic
     {
-        Task PostAsync(TaskInputModel model);
+        Task PostAsync(TaskInputModel model, Guid columnId);
         Task<TaskModel> GetByIdAsync(Guid taskId);
+        IAsyncEnumerable<TaskModel> GetAllAsync(Guid columnId);
         Task UpdateAsync(TaskUpdateModel model, Guid taskId);
         Task DeleteAsync(Guid taskId);
         IAsyncEnumerable<TaskModel> GetAllAsync();

@@ -9,7 +9,11 @@
         <tagDatabase tag="v.2.0.0"/>
     </changeSet>
 
+    <include file="create-table-boards.xml" relativeToChangelogFile="true"/>
+    <include file="create-table-columns.xml" relativeToChangelogFile="true"/>
     <include file="create-table-tasks.xml" relativeToChangelogFile="true"/>
     <include file="create-table-subtasks.xml" relativeToChangelogFile="true"/>
+    
+    <!--<include file="insert-values-into-taskboard.xml" relativeToChangelogFile="true"/>-->
 
 </databaseChangeLog>

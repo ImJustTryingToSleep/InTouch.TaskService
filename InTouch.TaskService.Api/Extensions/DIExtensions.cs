@@ -13,6 +13,8 @@ namespace InTouch.TaskService.Api.Extensions
         {
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<ISubTaskRepository, SubTaskRepository>();
+            services.AddScoped<IBoardRepository, BoardRepository>();
+            services.AddScoped<IColumnRepository, ColumnRepository>();
             return services;
         }
 
@@ -20,6 +22,8 @@ namespace InTouch.TaskService.Api.Extensions
         {
             services.AddScoped<ITaskLogic, TaskLogic>();
             services.AddScoped<ISubTaskLogic, SubTaskLogic>();
+            services.AddScoped<IBoardLogic, BoardLogic>();
+            services.AddScoped<IColumnLogic, ColumnLogic>();
             services.AddAutoMapper(typeof(MapperConfig));
             return services;
         }

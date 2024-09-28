@@ -8,13 +8,13 @@
     <property name="uuid_type" value="uuid" dbms="postgresql"/>
     <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
     
-    <changeSet id="create-subtasks.v1" author="Val">
+    <changeSet id="create-table-subtasks" author="Val">
         <createTable tableName="subtasks">
             <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="basedon" type="uuid">
-                <constraints nullable="false" foreignKeyName="subtasks_basedon_tasks.v1_id" references="tasksv1(id)" 
+                <constraints nullable="false" foreignKeyName="subtasks_basedon_tasks_id" references="tasks(id)" 
                              deleteCascade="true"/>
             </column>
             <column name="name" type="varchar(20) ">

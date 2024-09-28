@@ -8,10 +8,14 @@
     <property name="uuid_type" value="uuid" dbms="postgresql"/>
     <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
     
-    <changeSet id="create-tasks" author="Val">
-        <createTable tableName="tasksv1">
+    <changeSet id="create-table-tasks" author="Val">
+        <createTable tableName="tasks">
             <column name="id" type="${uuid_type}" defaultValueComputed="${uuid_function}">
                 <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="columnid" type="uuid">
+                <constraints nullable="true" foreignKeyName="tasks_columnid_columns_id"
+                             references="columns(id)" deleteCascade="true"/>
             </column>
             <column name="name" type="varchar(20) ">
                 <constraints nullable="false"/>

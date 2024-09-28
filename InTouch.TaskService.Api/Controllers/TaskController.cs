@@ -20,9 +20,9 @@ namespace InTouch.TaskService.Api.Controllers
         
         [HttpPost]
         [Route("createTask")]
-        public async Task PostAsync([FromBody] TaskInputModel model)
+        public async Task PostAsync([FromBody] TaskInputModel model, Guid columnId)
         {
-            await _taskLogic.PostAsync(model);
+            await _taskLogic.PostAsync(model, columnId);
         }
         
         [HttpGet("getTask")]

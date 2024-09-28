@@ -36,4 +36,14 @@ public class SubTaskLogic : ISubTaskLogic
             throw;
         }
     }
+    
+    public async IAsyncEnumerable<SubTaskModel> GetSubTasksByIdAsync(Guid taskId)
+    {
+        var subtasks = _subSubtaskRepository.GetSubTasksAsync(taskId);
+
+        await foreach (var subtask in subtasks)
+        {
+            yield return subtask;;
+        }
+    }
 }

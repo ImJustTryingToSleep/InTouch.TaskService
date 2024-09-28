@@ -18,6 +18,7 @@ namespace InTouch.TaskService.BLL.Logic
     {
         private readonly ITaskRepository _taskRepository;
         private readonly ISubTaskRepository _subTaskRepository;
+        private readonly ISubTaskLogic _subTaskLogic;
         private readonly IMapper _mapper;
         private readonly ILogger<TaskLogic> _logger;
 
@@ -25,20 +26,21 @@ namespace InTouch.TaskService.BLL.Logic
             ITaskRepository taskRepository,
             ISubTaskRepository subTaskRepository,
             IMapper mapper,
-            ILogger<TaskLogic> logger)
+            ILogger<TaskLogic> logger, ISubTaskLogic subTaskLogic)
         {
             _taskRepository = taskRepository;
             _subTaskRepository = subTaskRepository;
             _mapper = mapper;
             _logger = logger;
+            _subTaskLogic = subTaskLogic;
         }
 
-        public async Task PostAsync(TaskInputModel model)
+        public async Task PostAsync(TaskInputModel model, Guid columnId)
         {
             try
             {
                 var task = _mapper.Map<TaskModel>(model);
-                await _taskRepository.PostAsync(task);
+                await _taskRepository.PostAsync(task, columnId);
             }
             catch (Exception ex)
             {
@@ -67,25 +69,30 @@ namespace InTouch.TaskService.BLL.Logic
         public async IAsyncEnumerable<TaskModel> GetAllAsync()
         {
             var tasks = _taskRepository.GetAllAsync();
-
             await foreach (var task in tasks)
             {
-                task.SubTasks = _subTaskRepository.GetSubTasksAsync(task.Id);
+                task.SubTasks = _subTaskLogic.GetSubTasksByIdAsync(task.Id);
                 yield return task;
             }
         }
+
+        public async IAsyncEnumerable<TaskModel> GetAllAsync(Guid columnId)
+        {
+            var tasks = _taskRepository.GetByColumnAsync(columnId);
+
+            await foreach (var task in tasks)
+            {
+                task.SubTasks = _subTaskLogic.GetSubTasksByIdAsync(task.Id);
+                yield return task;
+            }
+        }
+
+        
 
         public async Task UpdateAsync(TaskUpdateModel model, Guid taskId)
         {
             try
             {
-                var task = await _taskRepository.GetAsync(taskId);
-
-                if (model.EndDate > task.EndDate)
-                {
-                    throw new ArgumentException("Дата окончания подзадачи не может быть больше основной задачи");
-                }
-                
                 await _taskRepository.UpdateAsync(model, taskId);
             }
             catch (Exception ex)

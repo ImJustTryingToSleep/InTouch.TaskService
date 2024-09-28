@@ -18,24 +18,25 @@ namespace InTouch.TaskService.DAL.Repository
             _logger = logger;
         }
 
-        public async Task PostAsync(TaskModel model)
+        public async Task PostAsync(TaskModel model, Guid columnId)
         {
             
             try
             {
-                var sql = "CALL public.post_task(@_name, @_description, @_enddate, @_author, @_executors)";
+                var sql = "CALL public.post_task(@_name, @_description, @_enddate, @_author, @_executors, @_columnid)";
                 var param = new
                 {
                     _name = model.Name,
                     _description = model.Description,
                     _enddate = model.EndDate,
                     _author = model.Author,
-                    _executors = model.Executors
+                    _executors = model.Executors,
+                    _columnid = columnId
                 };
 
                 await ExecuteAsync(sql, param);
 
-                _logger.LogInformation("Task was created");
+                _logger.LogInformation("Задача была создана");
             }
             catch (Exception ex)
             {
@@ -65,9 +66,25 @@ namespace InTouch.TaskService.DAL.Repository
 
         public async IAsyncEnumerable<TaskModel> GetAllAsync()
         {
-            var sql = "SELECT * FROM public.getAll_task()";
+            var sql = "SELECT * FROM public.get_all_tasks()";
             var tasks =  QueryAsync<TaskModel>(sql);
             
+            await foreach (var task in tasks)
+            {
+                yield return task;
+            }
+        }
+
+        public async IAsyncEnumerable<TaskModel> GetByColumnAsync(Guid id)
+        {
+            var sql = "SELECT * FROM public.gettasks_bycolumn(@_id)";
+            var param = new
+            {
+                _id = id
+            };
+            
+            var tasks = QueryAsync<TaskModel>(sql, param);
+
             await foreach (var task in tasks)
             {
                 yield return task;
