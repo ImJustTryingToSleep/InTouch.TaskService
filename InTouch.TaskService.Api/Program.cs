@@ -1,18 +1,22 @@
+using InTouch.Authorization.DI;
 using InTouch.TaskService.Api.Extensions;
 using InTouch.TaskService.BLL.Logic.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+var configuration = builder.Configuration;
+builder.Services.AuthConfigure(configuration);
+
 builder.Services.ConfigureDALDependecies();
 builder.Services.ConfigureBLLDependecies();
+
+
 
 var app = builder.Build();
 

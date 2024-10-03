@@ -17,7 +17,7 @@ public class SubTaskRepository : BaseRepository, ISubTaskRepository
         _logger = logger;
     }
 
-    public async Task CreateAsync(SubTaskModel model, Guid mainTaskId)
+    public async Task CreateAsync(TaskModel model, Guid mainTaskId)
     {
         try
         {
@@ -43,14 +43,14 @@ public class SubTaskRepository : BaseRepository, ISubTaskRepository
         }
     }
 
-    public async IAsyncEnumerable<SubTaskModel> GetSubTasksAsync(Guid mainTaskId)
+    public async IAsyncEnumerable<TaskModel> GetSubTasksAsync(Guid mainTaskId)
     {
         var sql = "SELECT * FROM public.getall_subtasks(@_mainTaskId)";
         var param = new
         {
             _mainTaskId = mainTaskId
         };
-        var tasks =  QueryAsync<SubTaskModel>(sql, param);
+        var tasks =  QueryAsync<TaskModel>(sql, param);
             
         await foreach (var task in tasks)
         {

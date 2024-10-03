@@ -1,5 +1,6 @@
 ﻿using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.Common.Entities.TaskBoards;
+using InTouch.TaskService.Common.Entities.TaskBoards.BoardUpdateModels;
 using InTouch.TaskService.Common.Entities.TaskBoards.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
 using Microsoft.Extensions.Logging;
@@ -41,19 +42,44 @@ public class BoardLogic : IBoardLogic
         }
     }
 
-    public async Task<BoardModel> GetTaskBoardAsync(Guid id)
+    public async Task<BoardModel> GetTaskBoardAsync(Guid boardId)
     {
         try
         {
-            var taskBoard = await _boardRepository.GetTaskBoardAsync(id);
-
-            taskBoard.Columns = _columnLogic.GetAllAsync(id);
+            var taskBoard = await _boardRepository.GetTaskBoardAsync(boardId);
+            taskBoard.Columns = _columnLogic.GetAllAsync(boardId);
 
             return taskBoard;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task UpdateAsync(Guid boardId, BoardUpdateModel model)
+    {
+        try
+        {
+            await _boardRepository.UpdateBoardAsync(boardId, model);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex,"Ошибка во время работы UpdateAsync");
+            throw;
+        }
+    }
+
+    public async Task DeleteAsync(Guid boardId)
+    {
+        try
+        {
+            await _boardRepository.DeleteBoardAsync(boardId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, "Ошибка во время работы DeleteAsync");
             throw;
         }
     }

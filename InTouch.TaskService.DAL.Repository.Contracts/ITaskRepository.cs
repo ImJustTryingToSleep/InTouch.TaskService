@@ -12,5 +12,7 @@ namespace InTouch.TaskService.DAL.Repository.Contracts
         IAsyncEnumerable<TaskModel> GetByColumnAsync(Guid id);
         Task UpdateAsync(TaskUpdateModel model, Guid taskId);
         Task DeleteAsync(Guid taskId);
+
+        Task<TaskDTO> GetTaskAsync(Guid taskId);
     }
 }

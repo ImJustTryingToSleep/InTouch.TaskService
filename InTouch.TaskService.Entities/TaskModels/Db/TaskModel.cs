@@ -15,6 +15,6 @@ namespace InTouch.TaskService.Common.Entities.TaskModels.Db
 
         public Guid Author { get; set; }
         public Guid[] Executors { get; set; }
-        public IAsyncEnumerable<SubTaskModel> SubTasks { get; set; }
+        public IAsyncEnumerable<TaskModel> SubTasks { get; set; }
     }
 }

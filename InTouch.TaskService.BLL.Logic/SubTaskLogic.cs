@@ -27,7 +27,7 @@ public class SubTaskLogic : ISubTaskLogic
     {
         try
         {
-            var task = _mapper.Map<SubTaskModel>(model);
+            var task = _mapper.Map<TaskModel>(model);
             await _subSubtaskRepository.CreateAsync(task, mainTaskId);
         }
         catch (Exception ex)
@@ -37,7 +37,7 @@ public class SubTaskLogic : ISubTaskLogic
         }
     }
     
-    public async IAsyncEnumerable<SubTaskModel> GetSubTasksByIdAsync(Guid taskId)
+    public async IAsyncEnumerable<TaskModel> GetSubTasksByIdAsync(Guid taskId)
     {
         var subtasks = _subSubtaskRepository.GetSubTasksAsync(taskId);
 

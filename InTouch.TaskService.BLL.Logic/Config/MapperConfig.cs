@@ -9,8 +9,8 @@ namespace InTouch.TaskService.BLL.Logic.Config
     {
         public MapperConfig()
         {
-            CreateMap<TaskInputModel, TaskModel>();
-            CreateMap<TaskInputModel, SubTaskModel>();
+            CreateMap<TaskInputModel, TaskModel>(); 
+            //CreateMap<TaskInputModel, SubTaskModel>();
             CreateMap<TaskUpdateModel, TaskModel>();
         }
     }

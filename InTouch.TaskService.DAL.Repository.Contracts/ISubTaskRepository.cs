@@ -4,6 +4,6 @@ namespace InTouch.TaskService.DAL.Repository.Contracts;
 
 public interface ISubTaskRepository
 {
-    Task CreateAsync(SubTaskModel model, Guid mainTaskId);
-    IAsyncEnumerable<SubTaskModel> GetSubTasksAsync(Guid mainTaskId);
+    Task CreateAsync(TaskModel model, Guid mainTaskId);
+    IAsyncEnumerable<TaskModel> GetSubTasksAsync(Guid mainTaskId);
 }

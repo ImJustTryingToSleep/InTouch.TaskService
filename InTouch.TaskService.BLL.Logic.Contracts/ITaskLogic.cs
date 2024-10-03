@@ -12,5 +12,7 @@ namespace InTouch.TaskService.BLL.Logic.Contracts
         Task UpdateAsync(TaskUpdateModel model, Guid taskId);
         Task DeleteAsync(Guid taskId);
         IAsyncEnumerable<TaskModel> GetAllAsync();
+
+        Task<TaskDTO> GetTaskAsync(Guid taskId);
     }
 }

@@ -1,7 +1,10 @@
+using InTouch.Authorization.Authz;
+using InTouch.Authorization.Permissions;
 using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.Common.Entities;
 using InTouch.TaskService.Common.Entities.ColumnModels.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +12,8 @@ namespace InTouch.TaskService.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    // [Authorize]
+    // [HasPermission([PermissionEnum.user, PermissionEnum.admin, PermissionEnum.sysadmin])]
     public class ColumnController : ControllerBase
     {
         private readonly IColumnLogic _columnLogic;

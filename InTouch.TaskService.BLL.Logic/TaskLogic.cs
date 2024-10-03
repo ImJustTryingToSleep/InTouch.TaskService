@@ -86,9 +86,7 @@ namespace InTouch.TaskService.BLL.Logic
                 yield return task;
             }
         }
-
         
-
         public async Task UpdateAsync(TaskUpdateModel model, Guid taskId)
         {
             try
@@ -114,6 +112,11 @@ namespace InTouch.TaskService.BLL.Logic
                 _logger.LogError(ex, "Ошибка при удалении");
                 throw;
             }
+        }
+
+        public async Task<TaskDTO> GetTaskAsync(Guid taskId)
+        {
+           return await _taskRepository.GetTaskAsync(taskId);
         }
     }
 }

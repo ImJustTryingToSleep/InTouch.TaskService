@@ -6,5 +6,5 @@ namespace InTouch.TaskService.BLL.Logic.Contracts;
 public interface ISubTaskLogic
 {
     Task CreateAsync(TaskInputModel model, Guid mainTaskId);
-    IAsyncEnumerable<SubTaskModel> GetSubTasksByIdAsync(Guid taskId);
+    IAsyncEnumerable<TaskModel> GetSubTasksByIdAsync(Guid taskId);
 }

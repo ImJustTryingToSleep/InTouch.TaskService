@@ -1,4 +1,5 @@
 ﻿using InTouch.TaskService.Common.Entities.TaskBoards;
+using InTouch.TaskService.Common.Entities.TaskBoards.BoardUpdateModels;
 using InTouch.TaskService.Common.Entities.TaskBoards.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
 using Microsoft.Extensions.Configuration;
@@ -39,14 +40,56 @@ public class BoardRepository : BaseRepository, IBoardRepository
         }
     }
 
-    public async Task<BoardModel> GetTaskBoardAsync(Guid id)
+    public async Task<BoardModel> GetTaskBoardAsync(Guid boardId)
     {
         var sql = "SELECT * FROM public.get_board(@_id)";
         var param = new
         {
-            _id = id
+            _id = boardId
         };
         
         return await QuerySingleAsync<BoardModel>(sql, param);
     }
+
+    public async Task UpdateBoardAsync(Guid boardId, BoardUpdateModel model)
+    {
+        try
+        {
+            var sql = "CALL update_board(@_id, @_name)";
+            var param = new
+            {
+                _id = boardId,
+                _name = model.Name
+            };
+            
+            await ExecuteAsync(sql, param);
+            _logger.LogDebug($"Board {boardId} was updated");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, "Произошла ошибка при работе UpdateBoardAsync");
+            throw;
+        }
+    }
+
+    public async Task DeleteBoardAsync(Guid boardId)
+    {
+        try
+        {
+            var sql = "CALL delete_board(@_id)";
+            var param = new
+            {
+                _id = boardId
+            };
+            
+            await ExecuteAsync(sql, param);
+            _logger.LogDebug($"Board {boardId} was deleted");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ошибка во время работы DeleteBoardAsync");
+            throw;
+        }
+    }
+    
 }

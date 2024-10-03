@@ -96,9 +96,10 @@ namespace InTouch.TaskService.DAL.Repository
             try
             {
                 var sql =
-                    "CALL public.update_task(@_name, @_description, @_type, @_status, @_executors, @_enddate, @_taskid)";
+                    "CALL public.update_task(@_columnid, @_name, @_description, @_type, @_status, @_executors, @_enddate, @_taskid)";
                 var param = new
                 {
+                    _columnid = model.ColumnId,
                     _name = model.Name,
                     _description = model.Description,
                     _type = model.Type,
@@ -135,5 +136,17 @@ namespace InTouch.TaskService.DAL.Repository
                 throw;
             }
         }
+
+        #region Test
+
+        public async Task<TaskDTO> GetTaskAsync(Guid taskId)
+        {
+            var sql = "SELECT * FROM public.get_task(@_id)";
+            var task =  await QuerySingleAsync<TaskDTO>(sql, new { _id = taskId });
+            return task;
+        }
+
+        #endregion
+       
     }
 }
