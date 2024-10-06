@@ -6,7 +6,7 @@ namespace InTouch.TaskService.DAL.Repository.Contracts
 {
     public interface ITaskRepository
     {
-        Task PostAsync(TaskModel model, Guid columnId);
+        Task<Guid> PostAsync(TaskModel model, Guid columnId);
         Task<TaskModel> GetAsync(Guid id);
         IAsyncEnumerable<TaskModel> GetAllAsync();
         IAsyncEnumerable<TaskModel> GetByColumnAsync(Guid id);

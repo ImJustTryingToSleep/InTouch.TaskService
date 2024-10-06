@@ -9,23 +9,19 @@ namespace InTouch.TaskService.BLL.Logic;
 public class ColumnLogic : IColumnLogic
 {
     private readonly IColumnRepository _columnRepository;
-    private readonly ITaskRepository _taskRepository;
-    private readonly ISubTaskLogic _subTaskLogic;
     private readonly ITaskLogic _taskLogic;
     private readonly ILogger<ColumnLogic> _logger;
-    private readonly ISubTaskRepository _subTaskRepository;
 
     public ColumnLogic(
         IColumnRepository columnRepository, 
         ITaskRepository taskRepository, 
         ILogger<ColumnLogic> logger, 
-        ISubTaskRepository subTaskRepository, ISubTaskLogic subTaskLogic, ITaskLogic taskLogic)
+        ISubTaskRepository subTaskRepository, 
+        ISubTaskLogic subTaskLogic, 
+        ITaskLogic taskLogic)
     {
         _columnRepository = columnRepository;
-        _taskRepository = taskRepository;
         _logger = logger;
-        _subTaskRepository = subTaskRepository;
-        _subTaskLogic = subTaskLogic;
         _taskLogic = taskLogic;
     }
 

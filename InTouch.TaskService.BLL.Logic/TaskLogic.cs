@@ -2,14 +2,8 @@
 using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
-using InTouch.TaskService.DAL.Repository;
 using InTouch.TaskService.DAL.Repository.Contracts;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using InTouch.TaskService.Common.Entities.TaskModels.UpdateModels;
 
 namespace InTouch.TaskService.BLL.Logic
@@ -19,17 +13,23 @@ namespace InTouch.TaskService.BLL.Logic
         private readonly ITaskRepository _taskRepository;
         private readonly ISubTaskRepository _subTaskRepository;
         private readonly ISubTaskLogic _subTaskLogic;
+        // private readonly INotificationLogic _notification;
+        // private readonly ISettingsRepository _settingsRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<TaskLogic> _logger;
 
         public TaskLogic(
             ITaskRepository taskRepository,
             ISubTaskRepository subTaskRepository,
+            // INotificationLogic notification,
+            // ISettingsRepository settingsRepository,
             IMapper mapper,
             ILogger<TaskLogic> logger, ISubTaskLogic subTaskLogic)
         {
             _taskRepository = taskRepository;
             _subTaskRepository = subTaskRepository;
+            // _notification = notification;
+            // _settingsRepository = settingsRepository;
             _mapper = mapper;
             _logger = logger;
             _subTaskLogic = subTaskLogic;
@@ -40,7 +40,8 @@ namespace InTouch.TaskService.BLL.Logic
             try
             {
                 var task = _mapper.Map<TaskModel>(model);
-                await _taskRepository.PostAsync(task, columnId);
+                var taskid = await _taskRepository.PostAsync(task, columnId);
+                _logger.LogDebug($"Posting task {taskid}");
             }
             catch (Exception ex)
             {
@@ -91,6 +92,27 @@ namespace InTouch.TaskService.BLL.Logic
         {
             try
             {
+                var task = await _taskRepository.GetAsync(taskId);
+                
+                // if (!task.Executors.SequenceEqual(model.Executors))
+                // {
+                //     var newUsers = model.Executors.Except(task.Executors);
+                //     
+                //     //var options = await _settingsRepository.GetAsync<NotificationServiceSettings>();
+                //     
+                //     foreach (var user in newUsers)
+                //     {
+                //         var emailMsg = new NotificationServiceMessage
+                //         {
+                //             EmailFrom = "yandex1.ru", 
+                //             EmailTo = "valentin.lushnikov.98@mail.ru",
+                //             MessageBody = $"{DateTime.Now} Вы приступили к задаче {task.Name}"
+                //         };
+                //         
+                //         await _notification.SendAsync(emailMsg);
+                //     }
+                // }
+                    
                 await _taskRepository.UpdateAsync(model, taskId);
             }
             catch (Exception ex)

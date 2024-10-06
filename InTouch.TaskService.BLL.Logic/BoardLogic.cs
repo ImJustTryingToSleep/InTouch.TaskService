@@ -10,22 +10,17 @@ namespace InTouch.TaskService.BLL.Logic;
 public class BoardLogic : IBoardLogic
 {
     private readonly IBoardRepository _boardRepository;
-    private readonly IColumnRepository _columnRepository;
-    private readonly ITaskRepository _taskRepository;
     private readonly ILogger<BoardLogic> _logger;
     
     private readonly IColumnLogic _columnLogic;
 
     public BoardLogic(
         IBoardRepository boardRepository,
-        IColumnRepository columnRepository,
         ILogger<BoardLogic> logger, 
-        ITaskRepository taskRepository, IColumnLogic columnLogic)
+        IColumnLogic columnLogic)
     {
         _boardRepository = boardRepository;
-        _columnRepository = columnRepository;
         _logger = logger;
-        _taskRepository = taskRepository;
         _columnLogic = columnLogic;
     }
 

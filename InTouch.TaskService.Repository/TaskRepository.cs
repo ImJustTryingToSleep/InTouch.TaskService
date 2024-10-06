@@ -18,12 +18,11 @@ namespace InTouch.TaskService.DAL.Repository
             _logger = logger;
         }
 
-        public async Task PostAsync(TaskModel model, Guid columnId)
+        public async Task<Guid> PostAsync(TaskModel model, Guid columnId)
         {
-            
             try
             {
-                var sql = "CALL public.post_task(@_name, @_description, @_enddate, @_author, @_executors, @_columnid)";
+                var sql = "SELECT * FROM public.create_task(@_name, @_description, @_enddate, @_author, @_executors, @_columnid)";
                 var param = new
                 {
                     _name = model.Name,
@@ -34,9 +33,7 @@ namespace InTouch.TaskService.DAL.Repository
                     _columnid = columnId
                 };
 
-                await ExecuteAsync(sql, param);
-
-                _logger.LogInformation("Задача была создана");
+                return await QuerySingleAsync<Guid>(sql, param);
             }
             catch (Exception ex)
             {

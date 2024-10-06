@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using InTouch.Notification.DI;
+using InTouch.SettingService.HubRegistration;
 using InTouch.TaskService.BLL.Logic;
 using InTouch.TaskService.BLL.Logic.Config;
 using InTouch.TaskService.BLL.Logic.Contracts;
@@ -24,8 +26,19 @@ namespace InTouch.TaskService.Api.Extensions
             services.AddScoped<ISubTaskLogic, SubTaskLogic>();
             services.AddScoped<IBoardLogic, BoardLogic>();
             services.AddScoped<IColumnLogic, ColumnLogic>();
+            
             services.AddAutoMapper(typeof(MapperConfig));
+            services.NotificationConfigure();
+            services.RegisterSettingsService();
             return services;
         }
+        
+        public static IServiceCollection ConfigureHttpClients(this IServiceCollection services)
+        {
+            services.AddHttpClient();
+
+            return services;
+        }
+
     }
 }

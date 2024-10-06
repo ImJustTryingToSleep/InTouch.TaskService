@@ -1,26 +1,30 @@
 using InTouch.Authorization.DI;
 using InTouch.TaskService.Api.Extensions;
 using InTouch.TaskService.BLL.Logic.Config;
+using FluentValidation.AspNetCore;
+using InTouch.Notification.DI;
+using InTouch.SettingService.HubRegistration;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+builder.Services.AddFluentValidationAutoValidation();
 
-var configuration = builder.Configuration;
+
 builder.Services.AuthConfigure(configuration);
+builder.Services.ConfigureHttpClients();
 
 builder.Services.ConfigureDALDependecies();
 builder.Services.ConfigureBLLDependecies();
-
-
+builder.Services.ConfigureValidationDependencies();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
