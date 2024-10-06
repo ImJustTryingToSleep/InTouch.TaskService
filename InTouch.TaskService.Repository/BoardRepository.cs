@@ -81,7 +81,7 @@ public class BoardRepository : BaseRepository, IBoardRepository
             {
                 _id = boardId
             };
-            
+             
             await ExecuteAsync(sql, param);
             _logger.LogDebug($"Board {boardId} was deleted");
         }
