@@ -14,9 +14,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddFluentValidationAutoValidation();
+//builder.Services.RegisterSettingsService();
 
+// var jwt = builder.Services.GetJwtOptions();
+// builder.Services.AuthConfigure(jwt);
 
-builder.Services.AuthConfigure(configuration);
 builder.Services.ConfigureHttpClients();
 
 builder.Services.ConfigureDALDependecies();

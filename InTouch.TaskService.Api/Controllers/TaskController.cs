@@ -25,9 +25,9 @@ namespace InTouch.TaskService.Api.Controllers
         
         [HttpPost]
         [Route("createTask")]
-        public async Task PostAsync([FromBody] TaskInputModel model, Guid columnId)
+        public async Task PostAsync([FromBody] TaskInputModel model, Guid columnId, Guid associatedWith)
         {
-            await _taskLogic.PostAsync(model, columnId);
+            await _taskLogic.PostAsync(model, columnId, associatedWith);
         }
         
         [HttpGet("getTask")]
@@ -58,13 +58,6 @@ namespace InTouch.TaskService.Api.Controllers
         public async Task Delete(Guid taskId)
         {
             await _taskLogic.DeleteAsync(taskId);
-        }
-        
-        [HttpGet]
-        [Route("getTask1")]
-        public async Task<TaskDTO> GetTaskAsync1(Guid taskId)
-        {
-            return await _taskLogic.GetTaskAsync(taskId);
         }
     }
 }

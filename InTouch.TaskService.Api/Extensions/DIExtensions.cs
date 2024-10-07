@@ -23,13 +23,11 @@ namespace InTouch.TaskService.Api.Extensions
         public static IServiceCollection ConfigureBLLDependecies(this IServiceCollection services)
         {
             services.AddScoped<ITaskLogic, TaskLogic>();
-            services.AddScoped<ISubTaskLogic, SubTaskLogic>();
             services.AddScoped<IBoardLogic, BoardLogic>();
             services.AddScoped<IColumnLogic, ColumnLogic>();
             
             services.AddAutoMapper(typeof(MapperConfig));
-            services.NotificationConfigure();
-            services.RegisterSettingsService();
+            //services.NotificationConfigure();
             return services;
         }
         

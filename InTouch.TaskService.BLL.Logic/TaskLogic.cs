@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using InTouch.Notification.Entities;
+using InTouch.Notification.Notification;
+using InTouch.SettingService.HubRegistration.Repository;
 using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
@@ -12,36 +15,36 @@ namespace InTouch.TaskService.BLL.Logic
     {
         private readonly ITaskRepository _taskRepository;
         private readonly ISubTaskRepository _subTaskRepository;
-        private readonly ISubTaskLogic _subTaskLogic;
-        // private readonly INotificationLogic _notification;
-        // private readonly ISettingsRepository _settingsRepository;
+        //private readonly INotificationLogic _notification;
+        //private readonly ISettingsRepository _settingsRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<TaskLogic> _logger;
 
         public TaskLogic(
             ITaskRepository taskRepository,
             ISubTaskRepository subTaskRepository,
-            // INotificationLogic notification,
-            // ISettingsRepository settingsRepository,
+            //INotificationLogic notification,
+            //ISettingsRepository settingsRepository,
             IMapper mapper,
-            ILogger<TaskLogic> logger, ISubTaskLogic subTaskLogic)
+            ILogger<TaskLogic> logger)
         {
             _taskRepository = taskRepository;
             _subTaskRepository = subTaskRepository;
-            // _notification = notification;
-            // _settingsRepository = settingsRepository;
+            //_notification = notification;
+            //_settingsRepository = settingsRepository;
             _mapper = mapper;
             _logger = logger;
-            _subTaskLogic = subTaskLogic;
         }
 
-        public async Task PostAsync(TaskInputModel model, Guid columnId)
+        public async Task PostAsync(TaskInputModel model, Guid columnId, Guid associatedWith)
         {
             try
             {
                 var task = _mapper.Map<TaskModel>(model);
+                task.AssociatedWith = associatedWith;
+                
                 var taskid = await _taskRepository.PostAsync(task, columnId);
-                _logger.LogDebug($"Posting task {taskid}");
+                _logger.LogInformation($"Posting task {taskid}");
             }
             catch (Exception ex)
             {
@@ -56,7 +59,7 @@ namespace InTouch.TaskService.BLL.Logic
             {
                 var task = await _taskRepository.GetAsync(taskId);
 
-                task.SubTasks = _subTaskRepository.GetSubTasksAsync(taskId);
+                task.RelatedTasks = _taskRepository.GetRelatedTasks(taskId);
 
                 return task;
             }
@@ -66,13 +69,12 @@ namespace InTouch.TaskService.BLL.Logic
                 throw;
             }
         }
-
+        
         public async IAsyncEnumerable<TaskModel> GetAllAsync()
         {
             var tasks = _taskRepository.GetAllAsync();
             await foreach (var task in tasks)
             {
-                task.SubTasks = _subTaskLogic.GetSubTasksByIdAsync(task.Id);
                 yield return task;
             }
         }
@@ -83,7 +85,6 @@ namespace InTouch.TaskService.BLL.Logic
 
             await foreach (var task in tasks)
             {
-                task.SubTasks = _subTaskLogic.GetSubTasksByIdAsync(task.Id);
                 yield return task;
             }
         }
@@ -92,27 +93,17 @@ namespace InTouch.TaskService.BLL.Logic
         {
             try
             {
-                var task = await _taskRepository.GetAsync(taskId);
-                
-                // if (!task.Executors.SequenceEqual(model.Executors))
+                // var task = await _taskRepository.GetAsync(taskId);
+                //
+                // if (task.Executors is null)
+                // {
+                //     await JoinJobMail(model.Executors, model.Name);
+                // }
+                // else
                 // {
                 //     var newUsers = model.Executors.Except(task.Executors);
-                //     
-                //     //var options = await _settingsRepository.GetAsync<NotificationServiceSettings>();
-                //     
-                //     foreach (var user in newUsers)
-                //     {
-                //         var emailMsg = new NotificationServiceMessage
-                //         {
-                //             EmailFrom = "yandex1.ru", 
-                //             EmailTo = "valentin.lushnikov.98@mail.ru",
-                //             MessageBody = $"{DateTime.Now} Вы приступили к задаче {task.Name}"
-                //         };
-                //         
-                //         await _notification.SendAsync(emailMsg);
-                //     }
+                //     await JoinJobMail(newUsers, model.Name);
                 // }
-                    
                 await _taskRepository.UpdateAsync(model, taskId);
             }
             catch (Exception ex)
@@ -127,7 +118,7 @@ namespace InTouch.TaskService.BLL.Logic
             try
             {
                 await _taskRepository.DeleteAsync(taskId);
-                _logger.LogDebug($"Задача {taskId} была удалена");
+                _logger.LogInformation($"Задача {taskId} была удалена");
             }
             catch (Exception ex)
             {
@@ -135,10 +126,21 @@ namespace InTouch.TaskService.BLL.Logic
                 throw;
             }
         }
-
-        public async Task<TaskDTO> GetTaskAsync(Guid taskId)
-        {
-           return await _taskRepository.GetTaskAsync(taskId);
-        }
+        
+        // private async Task JoinJobMail(IEnumerable<Guid> executors, string taskName)
+        // {
+        //     
+        //     foreach (var user in executors)
+        //     {
+        //         var emailMsg = new NotificationServiceMessage
+        //         {
+        //             EmailFrom = "yandex1.ru", 
+        //             EmailTo = "valentin.lushnikov.98@mail.ru",
+        //             MessageBody = $"{DateTime.Now} Вы приступили к задаче {taskName}"
+        //         };
+        //
+        //         await _notification.SendAsync(emailMsg);
+        //     }
+        // }
     }
 }

@@ -22,7 +22,7 @@ namespace InTouch.TaskService.DAL.Repository
         {
             try
             {
-                var sql = "SELECT * FROM public.create_task(@_name, @_description, @_enddate, @_author, @_executors, @_columnid)";
+                var sql = "SELECT * FROM public.create_task(@_name, @_description, @_enddate, @_author, @_executors, @_associatedwith, @_columnid)";
                 var param = new
                 {
                     _name = model.Name,
@@ -30,7 +30,8 @@ namespace InTouch.TaskService.DAL.Repository
                     _enddate = model.EndDate,
                     _author = model.Author,
                     _executors = model.Executors,
-                    _columnid = columnId
+                    _columnid = columnId,
+                    _associatedwith = model.AssociatedWith,
                 };
 
                 return await QuerySingleAsync<Guid>(sql, param);
@@ -61,6 +62,21 @@ namespace InTouch.TaskService.DAL.Repository
             }
         }
 
+        public async IAsyncEnumerable<TaskModel> GetRelatedTasks(Guid taskId)
+        {
+            var sql = "SELECT * FROM public.get_related_tasks(@_id)";
+            var param = new
+            {
+                _id = taskId
+            };
+            var relatedTasks = QueryAsync<TaskModel>(sql, param);
+
+            await foreach (var task in relatedTasks)
+            {
+                yield return task;
+            }
+        }
+
         public async IAsyncEnumerable<TaskModel> GetAllAsync()
         {
             var sql = "SELECT * FROM public.get_all_tasks()";
@@ -68,6 +84,7 @@ namespace InTouch.TaskService.DAL.Repository
             
             await foreach (var task in tasks)
             {
+                task.RelatedTasks = GetRelatedTasks(task.Id);
                 yield return task;
             }
         }
@@ -84,6 +101,7 @@ namespace InTouch.TaskService.DAL.Repository
 
             await foreach (var task in tasks)
             {
+                task.RelatedTasks = GetRelatedTasks(task.Id);
                 yield return task;
             }
         }
@@ -93,14 +111,12 @@ namespace InTouch.TaskService.DAL.Repository
             try
             {
                 var sql =
-                    "CALL public.update_task(@_columnid, @_name, @_description, @_type, @_status, @_executors, @_enddate, @_taskid)";
+                    "CALL public.update_task(@_columnid, @_name, @_description, @_executors, @_enddate, @_taskid)";
                 var param = new
                 {
                     _columnid = model.ColumnId,
                     _name = model.Name,
                     _description = model.Description,
-                    _type = model.Type,
-                    _status = model.Status,
                     _executors = model.Executors,
                     _enddate = model.EndDate.ToLocalTime(),
                     _taskid = taskId
@@ -133,17 +149,5 @@ namespace InTouch.TaskService.DAL.Repository
                 throw;
             }
         }
-
-        #region Test
-
-        public async Task<TaskDTO> GetTaskAsync(Guid taskId)
-        {
-            var sql = "SELECT * FROM public.get_task(@_id)";
-            var task =  await QuerySingleAsync<TaskDTO>(sql, new { _id = taskId });
-            return task;
-        }
-
-        #endregion
-       
     }
 }
