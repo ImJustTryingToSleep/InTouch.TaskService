@@ -1,4 +1,5 @@
-﻿using InTouch.TaskService.Common.Entities;
+﻿using InTouch.SettingService.HubRegistration.Repository;
+using InTouch.TaskService.Common.Entities;
 using InTouch.TaskService.Common.Entities.ColumnModels.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
 using Microsoft.Extensions.Configuration;
@@ -9,14 +10,14 @@ namespace InTouch.TaskService.DAL.Repository;
 
 public class ColumnRepository : BaseRepository, IColumnRepository
 {
+    private readonly ISettingsRepository _settingsRepository;
     private readonly ILogger<BaseRepository> _logger;
-    private readonly IConfiguration _configuration;
     public ColumnRepository(
-        ILogger<BaseRepository> logger, 
-        IConfiguration configuration) : base(logger, configuration)
+        ISettingsRepository settingsRepository,
+        ILogger<BaseRepository> logger) : base(logger,settingsRepository)
     {
         _logger = logger;
-        _configuration = configuration;
+        _settingsRepository = settingsRepository;
     }
 
 

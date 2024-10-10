@@ -1,4 +1,5 @@
-﻿using InTouch.TaskService.Common.Entities.TaskModels.Db;
+﻿using InTouch.SettingService.HubRegistration.Repository;
+using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
 using InTouch.TaskService.Common.Entities.TaskModels.UpdateModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
@@ -9,12 +10,14 @@ namespace InTouch.TaskService.DAL.Repository
 {
     public class TaskRepository : BaseRepository, ITaskRepository
     {
+        private readonly ISettingsRepository _settingsRepository;
         private readonly ILogger<TaskRepository> _logger;
 
         public TaskRepository(
-            ILogger<TaskRepository> logger, 
-            IConfiguration configuration) : base(logger, configuration)
+            ISettingsRepository settingsRepository,
+            ILogger<TaskRepository> logger) : base(logger, settingsRepository)
         {
+            _settingsRepository = settingsRepository;
             _logger = logger;
         }
 

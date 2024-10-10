@@ -3,6 +3,7 @@ using InTouch.Notification.Entities;
 using InTouch.Notification.Notification;
 using InTouch.SettingService.HubRegistration.Repository;
 using InTouch.TaskService.BLL.Logic.Contracts;
+using InTouch.TaskService.Common.Entities;
 using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
@@ -14,24 +15,21 @@ namespace InTouch.TaskService.BLL.Logic
     public class TaskLogic : ITaskLogic
     {
         private readonly ITaskRepository _taskRepository;
-        private readonly ISubTaskRepository _subTaskRepository;
-        //private readonly INotificationLogic _notification;
-        //private readonly ISettingsRepository _settingsRepository;
+        private readonly INotificationLogic _notification;
+        private readonly ISettingsRepository _settingsRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<TaskLogic> _logger;
 
         public TaskLogic(
             ITaskRepository taskRepository,
-            ISubTaskRepository subTaskRepository,
-            //INotificationLogic notification,
-            //ISettingsRepository settingsRepository,
+            INotificationLogic notification,
+            ISettingsRepository settingsRepository,
             IMapper mapper,
             ILogger<TaskLogic> logger)
         {
             _taskRepository = taskRepository;
-            _subTaskRepository = subTaskRepository;
-            //_notification = notification;
-            //_settingsRepository = settingsRepository;
+            _notification = notification;
+            _settingsRepository = settingsRepository;
             _mapper = mapper;
             _logger = logger;
         }
@@ -93,17 +91,18 @@ namespace InTouch.TaskService.BLL.Logic
         {
             try
             {
-                // var task = await _taskRepository.GetAsync(taskId);
-                //
-                // if (task.Executors is null)
-                // {
-                //     await JoinJobMail(model.Executors, model.Name);
-                // }
-                // else
-                // {
-                //     var newUsers = model.Executors.Except(task.Executors);
-                //     await JoinJobMail(newUsers, model.Name);
-                // }
+                var task = await _taskRepository.GetAsync(taskId);
+                
+                if (task.Executors is null)
+                {
+                    await JoinJobMail(model.Executors, model.Name);
+                }
+                else
+                {
+                    var newUsers = model.Executors.Except(task.Executors);
+                    await JoinJobMail(newUsers, model.Name);
+                }
+                
                 await _taskRepository.UpdateAsync(model, taskId);
             }
             catch (Exception ex)
@@ -127,20 +126,20 @@ namespace InTouch.TaskService.BLL.Logic
             }
         }
         
-        // private async Task JoinJobMail(IEnumerable<Guid> executors, string taskName)
-        // {
-        //     
-        //     foreach (var user in executors)
-        //     {
-        //         var emailMsg = new NotificationServiceMessage
-        //         {
-        //             EmailFrom = "yandex1.ru", 
-        //             EmailTo = "valentin.lushnikov.98@mail.ru",
-        //             MessageBody = $"{DateTime.Now} Вы приступили к задаче {taskName}"
-        //         };
-        //
-        //         await _notification.SendAsync(emailMsg);
-        //     }
-        // }
+        private async Task JoinJobMail(IEnumerable<Guid> executors, string taskName)
+        {
+            var options = await _settingsRepository.GetAsync<TaskServiceSettings>();
+            foreach (var user in executors)
+            {
+                var emailMsg = new NotificationServiceMessage
+                {
+                    EmailFrom = options.ConnectionStrings.EmailFrom, 
+                    EmailTo = "valentin.lushnikov.98@mail.ru",                                     // Тут надо получить майлы пользователей из юзерсервиса(из бд, gRPC?)
+                    MessageBody = $"{DateTime.Now} Вы приступили к задаче {taskName}"
+                };
+        
+                await _notification.SendAsync(emailMsg, options.Kafka.Topic);
+            }
+        }
     }
 }

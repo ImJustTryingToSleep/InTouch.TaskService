@@ -1,4 +1,5 @@
-﻿using InTouch.TaskService.Common.Entities.TaskBoards;
+﻿using InTouch.SettingService.HubRegistration.Repository;
+using InTouch.TaskService.Common.Entities.TaskBoards;
 using InTouch.TaskService.Common.Entities.TaskBoards.BoardUpdateModels;
 using InTouch.TaskService.Common.Entities.TaskBoards.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
@@ -9,15 +10,15 @@ namespace InTouch.TaskService.DAL.Repository;
 
 public class BoardRepository : BaseRepository, IBoardRepository
 {
+    private readonly ISettingsRepository _settingsRepository;
     private readonly ILogger<BoardRepository> _logger;
-    private readonly IConfiguration _configuration;
     
     public BoardRepository(
-        ILogger<BoardRepository> logger, 
-        IConfiguration configuration) : base(logger, configuration)
+        ISettingsRepository settingsRepository,
+        ILogger<BoardRepository> logger) : base(logger, settingsRepository)
     {
+        _settingsRepository = settingsRepository;
         _logger = logger;
-        _configuration = configuration;
     }
 
     public async Task CreateBoard(BoardInputModel model)

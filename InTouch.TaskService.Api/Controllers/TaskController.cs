@@ -12,8 +12,6 @@ namespace InTouch.TaskService.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize]
-    // [HasPermission([PermissionEnum.user, PermissionEnum.admin, PermissionEnum.sysadmin])]
     public class TaskController : ControllerBase
     {
         private readonly ITaskLogic _taskLogic;
@@ -30,6 +28,8 @@ namespace InTouch.TaskService.Api.Controllers
             await _taskLogic.PostAsync(model, columnId, associatedWith);
         }
         
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpGet("getTask")]
         public async Task<TaskModel> GetAsync([Required] Guid taskId)
         {

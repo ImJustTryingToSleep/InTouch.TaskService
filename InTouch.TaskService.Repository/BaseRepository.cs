@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using InTouch.SettingService.HubRegistration.Repository;
+using InTouch.TaskService.Common.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Npgsql;
@@ -7,14 +9,14 @@ namespace InTouch.TaskService.DAL.Repository
 {
     public abstract class BaseRepository
     {
-        private readonly IConfiguration _configuration;
+        private readonly ISettingsRepository _settingsRepository;
         private readonly ILogger<BaseRepository> _logger;
 
         public BaseRepository(
             ILogger<BaseRepository> logger,
-            IConfiguration configuration)
+            ISettingsRepository settingsRepository)
         {
-            _configuration = configuration;
+            _settingsRepository = settingsRepository;
             _logger = logger;
         }
 
@@ -22,7 +24,7 @@ namespace InTouch.TaskService.DAL.Repository
         {
             try
             {
-                using var connection = GetConnection();
+                using var connection = await GetConnection();
                 await connection.QueryAsync(sql, param);
             }
             catch (Exception ex)
@@ -34,7 +36,7 @@ namespace InTouch.TaskService.DAL.Repository
 
         public async IAsyncEnumerable<T> QueryAsync<T>(string sql, object param = null)
         {
-            using var connection = GetConnection();
+            using var connection = await GetConnection();
             var reader = await connection.ExecuteReaderAsync(sql, param);
             var rowParser = reader.GetRowParser<T>();
 
@@ -48,7 +50,7 @@ namespace InTouch.TaskService.DAL.Repository
         {
             try
             {
-                using var connection = GetConnection();
+                using var connection = await GetConnection();
                 return await connection.QueryFirstOrDefaultAsync<T>(sql, param);
             }
             catch (Exception ex)
@@ -59,9 +61,18 @@ namespace InTouch.TaskService.DAL.Repository
 
         }
 
-        protected NpgsqlConnection GetConnection()
+        protected async Task<NpgsqlConnection> GetConnection()
         {
-            return new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            try
+            {
+                var connectionString = await _settingsRepository.GetAsync<TaskServiceSettings>();
+                return new NpgsqlConnection(connectionString.ConnectionStrings.PostgreSQL);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ошибка при подключении к БД");
+                throw;
+            }
         }
     }
 }

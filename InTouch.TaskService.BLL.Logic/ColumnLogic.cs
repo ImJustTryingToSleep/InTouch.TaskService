@@ -16,7 +16,6 @@ public class ColumnLogic : IColumnLogic
         IColumnRepository columnRepository, 
         ITaskRepository taskRepository, 
         ILogger<ColumnLogic> logger, 
-        ISubTaskRepository subTaskRepository,
         ITaskLogic taskLogic)
     {
         _columnRepository = columnRepository;

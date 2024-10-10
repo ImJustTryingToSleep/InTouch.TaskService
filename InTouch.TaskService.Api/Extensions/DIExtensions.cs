@@ -14,7 +14,6 @@ namespace InTouch.TaskService.Api.Extensions
         public static IServiceCollection ConfigureDALDependecies(this IServiceCollection services)
         {
             services.AddScoped<ITaskRepository, TaskRepository>();
-            services.AddScoped<ISubTaskRepository, SubTaskRepository>();
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<IColumnRepository, ColumnRepository>();
             return services;
@@ -26,8 +25,6 @@ namespace InTouch.TaskService.Api.Extensions
             services.AddScoped<IBoardLogic, BoardLogic>();
             services.AddScoped<IColumnLogic, ColumnLogic>();
             
-            services.AddAutoMapper(typeof(MapperConfig));
-            //services.NotificationConfigure();
             return services;
         }
         
