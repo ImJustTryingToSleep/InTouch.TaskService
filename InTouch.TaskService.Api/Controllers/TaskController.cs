@@ -28,8 +28,8 @@ namespace InTouch.TaskService.Api.Controllers
             await _taskLogic.PostAsync(model, columnId, associatedWith);
         }
         
-        [Authorize]
-        [HasPermission([PermissionEnum.user])]
+        // [Authorize]
+        // [HasPermission([PermissionEnum.user])]
         [HttpGet("getTask")]
         public async Task<TaskModel> GetAsync([Required] Guid taskId)
         {
@@ -55,9 +55,9 @@ namespace InTouch.TaskService.Api.Controllers
         
         [HttpDelete]
         [Route("deleteTask")]
-        public async Task Delete(Guid taskId)
+        public async Task DeleteAsync(Guid taskId, Guid userId)
         {
-            await _taskLogic.DeleteAsync(taskId);
+            await _taskLogic.DeleteAsync(taskId, userId);
         }
     }
 }

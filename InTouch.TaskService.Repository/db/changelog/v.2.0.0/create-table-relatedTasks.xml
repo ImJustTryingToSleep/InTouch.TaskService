@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="gen_random_uuid()" dbms="postgresql"/>
+
+    <changeSet id="create-table-relatedtasks" author="Val">
+        <createTable tableName="related_tasks">
+            <column name="task_id" type="${uuid_type}">
+                <constraints nullable="true"  deleteCascade="true"/>
+            </column>
+            <column name="relatedtask_id" type="uuid">
+                <constraints nullable="true" deleteCascade="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="Val" id="addPrimaryKey">
+        <addPrimaryKey tableName="related_tasks" columnNames="task_id,relatedtask_id" constraintName="primary_key_constraint"/>
+    </changeSet>
+</databaseChangeLog>

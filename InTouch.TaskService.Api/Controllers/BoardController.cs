@@ -23,7 +23,6 @@ namespace InTouch.TaskService.Api.Controllers
             _boardLogic = boardLogic;
         }
         
-       
         [HttpPost]
         [Route("createBoard")]
         public async Task PostAsync([FromBody] BoardInputModel model)

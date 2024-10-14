@@ -2,6 +2,7 @@
 using InTouch.Notification.Entities;
 using InTouch.Notification.Notification;
 using InTouch.SettingService.HubRegistration.Repository;
+using InTouch.SettingsServiceTasks;
 using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.Common.Entities;
 using InTouch.TaskService.Common.Entities.TaskModels.Db;
@@ -33,7 +34,13 @@ namespace InTouch.TaskService.BLL.Logic
             _mapper = mapper;
             _logger = logger;
         }
-
+        
+        /// <summary>
+        /// Сreating a Task
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="columnId"></param>
+        /// <param name="associatedWith"></param>
         public async Task PostAsync(TaskInputModel model, Guid columnId, Guid associatedWith)
         {
             try
@@ -50,7 +57,11 @@ namespace InTouch.TaskService.BLL.Logic
                 throw;
             }
         }
-
+        /// <summary>
+        /// Getting a task by id
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         public async Task<TaskModel> GetByIdAsync(Guid taskId)
         {
             try
@@ -68,6 +79,10 @@ namespace InTouch.TaskService.BLL.Logic
             }
         }
         
+        /// <summary>
+        /// Getting all tasks
+        /// </summary>
+        /// <returns></returns>
         public async IAsyncEnumerable<TaskModel> GetAllAsync()
         {
             var tasks = _taskRepository.GetAllAsync();
@@ -76,7 +91,12 @@ namespace InTouch.TaskService.BLL.Logic
                 yield return task;
             }
         }
-
+        
+        /// <summary>
+        /// Getting all tasks by column id
+        /// </summary>
+        /// <param name="columnId"></param>
+        /// <returns></returns>
         public async IAsyncEnumerable<TaskModel> GetAllAsync(Guid columnId)
         {
             var tasks = _taskRepository.GetByColumnAsync(columnId);
@@ -87,6 +107,11 @@ namespace InTouch.TaskService.BLL.Logic
             }
         }
         
+        /// <summary>
+        /// Updating a task
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="taskId"></param>
         public async Task UpdateAsync(TaskUpdateModel model, Guid taskId)
         {
             try
@@ -112,20 +137,37 @@ namespace InTouch.TaskService.BLL.Logic
             }
         }
 
-        public async Task DeleteAsync(Guid taskId)
+        /// <summary>
+        /// Deleting a task
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <param name="userId"></param>
+        public async Task DeleteAsync(Guid taskId, Guid userId)
         {
             try
             {
+                var task = await _taskRepository.GetAsync(taskId);
+                
+                if (task.Author != userId)
+                {
+                    throw new Exception("\nInsufficient rights to delete task");
+                }
+                
                 await _taskRepository.DeleteAsync(taskId);
-                _logger.LogInformation($"Задача {taskId} была удалена");
+                _logger.LogInformation($"Task {taskId} was deleted");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при удалении");
+                _logger.LogError(ex, "Error while deleting the task");
                 throw;
             }
         }
         
+        /// <summary>
+        /// Sending email to new executors
+        /// </summary>
+        /// <param name="executors"></param>
+        /// <param name="taskName"></param>
         private async Task JoinJobMail(IEnumerable<Guid> executors, string taskName)
         {
             var options = await _settingsRepository.GetAsync<TaskServiceSettings>();

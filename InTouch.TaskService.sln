@@ -23,6 +23,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InTouch.TaskService.DAL.Rep
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InTouch.TaskService.BLL.Logic", "InTouch.TaskService.BLL.Logic\InTouch.TaskService.BLL.Logic.csproj", "{A513716D-6FA5-4BC4-8B60-9AFCA9185DD1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{6E12B99F-F5CF-4DC2-A3D7-069693470512}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTouch.SettingsServiceTasks", "InTouch.SettingsServiceTasks\InTouch.SettingsServiceTasks.csproj", "{C3A14DB6-07CF-4815-B45C-A1D759604F38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,10 @@ Global
 		{A513716D-6FA5-4BC4-8B60-9AFCA9185DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A513716D-6FA5-4BC4-8B60-9AFCA9185DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A513716D-6FA5-4BC4-8B60-9AFCA9185DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3A14DB6-07CF-4815-B45C-A1D759604F38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A14DB6-07CF-4815-B45C-A1D759604F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A14DB6-07CF-4815-B45C-A1D759604F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A14DB6-07CF-4815-B45C-A1D759604F38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +72,7 @@ Global
 		{E0DDA5F9-6383-4FDA-B358-289122D40460} = {FF7663C1-4806-4B16-86FB-16C61E07CBD0}
 		{653ED8C3-8AE3-4394-AF07-A24782C09AA1} = {6142A43A-A68D-4CA1-94A6-1125392858AA}
 		{A513716D-6FA5-4BC4-8B60-9AFCA9185DD1} = {FF7663C1-4806-4B16-86FB-16C61E07CBD0}
+		{C3A14DB6-07CF-4815-B45C-A1D759604F38} = {6E12B99F-F5CF-4DC2-A3D7-069693470512}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2CBF82E0-DEC6-4282-A20B-F36DD7AABA82}

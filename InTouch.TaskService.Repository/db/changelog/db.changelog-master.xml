@@ -4,7 +4,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    
-    <include file="v.2.0.0/changelog.xml" relativeToChangelogFile="true"/>
 
+    <include file="C:\Users\ChuhanChevapchichi\source\repos\InTouch.TaskService\InTouch.TaskService.Repository\db\changelog\v.2.0.0\changelog.xml" relativeToChangelogFile="true"/>
+    <include file="C:\Users\ChuhanChevapchichi\source\repos\InTouch.TaskService\InTouch.TaskService.Repository\db\changelog\Functions\changelog.xml" relativeToChangelogFile="true"/>
+    <include file="C:\Users\ChuhanChevapchichi\source\repos\InTouch.TaskService\InTouch.TaskService.Repository\db\changelog\Procedures\changelog.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

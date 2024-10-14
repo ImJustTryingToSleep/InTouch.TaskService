@@ -97,7 +97,7 @@ public class ColumnRepository : BaseRepository, IColumnRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ошибка при обновлении в БД");
+            _logger.LogError(ex, "Error when updating the database");
             throw;
         }
     }

@@ -67,7 +67,7 @@ namespace InTouch.TaskService.DAL.Repository
 
         public async IAsyncEnumerable<TaskModel> GetRelatedTasks(Guid taskId)
         {
-            var sql = "SELECT * FROM public.get_related_tasks(@_id)";
+            var sql = "SELECT * FROM public.get_related_tasks1(@_id)";
             var param = new
             {
                 _id = taskId

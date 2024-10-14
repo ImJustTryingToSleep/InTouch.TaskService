@@ -13,8 +13,7 @@ public class ColumnLogic : IColumnLogic
     private readonly ILogger<ColumnLogic> _logger;
 
     public ColumnLogic(
-        IColumnRepository columnRepository, 
-        ITaskRepository taskRepository, 
+        IColumnRepository columnRepository,
         ILogger<ColumnLogic> logger, 
         ITaskLogic taskLogic)
     {
@@ -24,6 +23,11 @@ public class ColumnLogic : IColumnLogic
     }
 
 
+    /// <summary>
+    /// Creating a column
+    /// </summary>
+    /// <param name="boardId"></param>
+    /// <param name="column"></param>
     public async Task CreateAsync(Guid boardId, ColumnInputModel column)
     {
         try
@@ -32,11 +36,16 @@ public class ColumnLogic : IColumnLogic
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ошибка при создании колонки");
+            _logger.LogError(ex, "Error creating column");
             throw;
         }
     }
 
+    /// <summary>
+    /// Getting a column by id
+    /// </summary>
+    /// <param name="columnId"></param>
+    /// <returns></returns>
     public async Task<ColumnModel> GetAsync(Guid columnId)
     {
         try
@@ -48,20 +57,27 @@ public class ColumnLogic : IColumnLogic
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ошибка при получении колонки в GetAsync");
+            _logger.LogError(ex, "Error when getting column in GetAsync");
             throw;
         }
     }
-
+    
+    /// <summary>
+    /// Getting all column by board id
+    /// </summary>
+    /// <param name="boardId"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public async IAsyncEnumerable<ColumnModel> GetAllAsync(Guid boardId)
     {
         var columns = _columnRepository.GetAllColumns(boardId);
 
         if (columns is null)
         {
-            throw new ArgumentNullException("Ошибка при получении колонок в GetAllAsync");
+            throw new ArgumentNullException("Error when getting columns in GetAllAsync");
         }
         
+        // Filling the column with tasks
         await foreach (var column in columns)
         {
             column.Tasks = _taskLogic.GetAllAsync(column.Id);
@@ -69,6 +85,11 @@ public class ColumnLogic : IColumnLogic
         }
     }
 
+    /// <summary>
+    /// Updating a column
+    /// </summary>
+    /// <param name="columnId"></param>
+    /// <param name="column"></param>
     public async Task UpdateAsync(Guid columnId, ColumnInputModel column)
     {
         try
@@ -82,12 +103,15 @@ public class ColumnLogic : IColumnLogic
         }
     }
 
-
+    /// <summary>
+    /// Deleting a column
+    /// </summary>
+    /// <param name="columnId"></param>
     public async Task DeleteAsync(Guid columnId)
     {
         try
         {
-            await _columnRepository.DeleteColumn(columnId);
+            await _columnRepository.DeleteColumn(columnId);               // Добавить проверку на удаление колонки
         }
         catch (Exception ex)
         {

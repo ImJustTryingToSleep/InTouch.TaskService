@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add-procedures" author="Val"/>
+
+    <include file="create_task.sql"/>
+    <include file="get-all-tasks.sql"/>
+    <include file="get-board.sql"/>
+    <include file="get-column.sql"/>
+    <include file="get-columns-byBoardId.sql"/>
+    <include file="get-task-byId.sql"/>
+    <include file="get-tasks-byColumn.sql"/>
+
+</databaseChangeLog>

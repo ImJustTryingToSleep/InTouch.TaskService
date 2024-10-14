@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using InTouch.SettingService.HubRegistration.Repository;
-using InTouch.TaskService.Common.Entities;
-using Microsoft.Extensions.Configuration;
+using InTouch.SettingsServiceTasks;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 
@@ -29,7 +28,7 @@ namespace InTouch.TaskService.DAL.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при работе ExecuteAsync");
+                _logger.LogError(ex, "Error during operation ExecuteAsync");
                 throw;
             }
         }
@@ -55,7 +54,7 @@ namespace InTouch.TaskService.DAL.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка во время работы QuerySingleAsync");
+                _logger.LogError(ex, "Error during operation QuerySingleAsync");
                 throw;
             }
 
@@ -70,7 +69,7 @@ namespace InTouch.TaskService.DAL.Repository
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ошибка при подключении к БД");
+                _logger.LogError("Error connecting to database");
                 throw;
             }
         }

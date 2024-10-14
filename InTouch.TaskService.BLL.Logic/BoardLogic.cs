@@ -24,6 +24,10 @@ public class BoardLogic : IBoardLogic
         _columnLogic = columnLogic;
     }
 
+    /// <summary>
+    /// Creating a board
+    /// </summary>
+    /// <param name="model"></param>
     public async Task CreateAsync(BoardInputModel model)
     {
         try
@@ -37,6 +41,11 @@ public class BoardLogic : IBoardLogic
         }
     }
 
+    /// <summary>
+    /// Getting board by id
+    /// </summary>
+    /// <param name="boardId"></param>
+    /// <returns></returns>
     public async Task<BoardModel> GetTaskBoardAsync(Guid boardId)
     {
         try
@@ -53,6 +62,11 @@ public class BoardLogic : IBoardLogic
         }
     }
 
+    /// <summary>
+    /// Updating a board
+    /// </summary>
+    /// <param name="boardId"></param>
+    /// <param name="model"></param>
     public async Task UpdateAsync(Guid boardId, BoardUpdateModel model)
     {
         try
@@ -66,6 +80,10 @@ public class BoardLogic : IBoardLogic
         }
     }
 
+    /// <summary>
+    /// Deleting a board
+    /// </summary>
+    /// <param name="boardId"></param>
     public async Task DeleteAsync(Guid boardId)
     {
         try

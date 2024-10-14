@@ -16,7 +16,5 @@
     <include file="delete-table-subtasks.xml" relativeToChangelogFile="true"/>
     <include file="drop-columns-tasks.xml" relativeToChangelogFile="true"/>
     <include file="add-column-tasks.xml" relativeToChangelogFile="true"/>
-    
-    <!--<include file="insert-values-into-taskboard.xml" relativeToChangelogFile="true"/>-->
-
+    <include file="create-table-relatedTasks.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

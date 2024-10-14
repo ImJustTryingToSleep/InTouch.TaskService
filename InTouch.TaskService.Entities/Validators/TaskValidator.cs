@@ -9,6 +9,6 @@ public class TaskValidator : AbstractValidator<TaskInputModel>
     {
         RuleFor(tv => tv.Name).NotNull().NotEmpty();
         RuleFor(tv => tv.Description).NotNull().NotEmpty();
-        RuleFor(tv => tv.AuthorId).NotNull().NotEmpty();
+        RuleFor(tv => tv.Author).NotNull().NotEmpty();
     }
 }
