@@ -1,0 +1,25 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "UserServiceClientGrpcApp";
+
+package user_service;
+
+// определение сервиса
+service UserServiceGrpc {
+  // отправка сообщения
+  rpc Send (UserServiceRequest) returns (UserServiceReply);
+}
+
+// сообщение от клиента содержит name
+message UserServiceRequest {
+  string UserId = 1;
+  google.protobuf.Timestamp CreateHash = 6;
+}
+
+// сообщение клиенту содержит message
+message UserServiceReply {
+  string Email = 1;
+  google.protobuf.Timestamp CreateHash = 6;
+}

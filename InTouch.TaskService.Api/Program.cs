@@ -4,6 +4,7 @@ using InTouch.TaskService.BLL.Logic.Config;
 using FluentValidation.AspNetCore;
 using InTouch.Notification.DI;
 using InTouch.SettingService.HubRegistration;
+using InTouch.TasService.BLL.gRPC;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -24,6 +25,7 @@ builder.Services.ConfigureHttpClients();
 
 builder.Services.ConfigureDALDependecies();
 builder.Services.ConfigureBLLDependecies();
+builder.Services.ConfigureGrpc();
 builder.Services.ConfigureValidationDependencies();
 
 var app = builder.Build();

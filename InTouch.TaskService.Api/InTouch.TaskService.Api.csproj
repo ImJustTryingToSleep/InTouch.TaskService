@@ -20,6 +20,7 @@
     <ProjectReference Include="..\InTouch.TaskService.BLL.Logic\InTouch.TaskService.BLL.Logic.csproj" />
     <ProjectReference Include="..\InTouch.TaskService.DAL.Repository.Contracts\InTouch.TaskService.DAL.Repository.Contracts.csproj" />
     <ProjectReference Include="..\InTouch.TaskService.Repository\InTouch.TaskService.DAL.Repository.csproj" />
+    <ProjectReference Include="..\InTouch.TasService.BLL.gRPC\InTouch.TasService.BLL.gRPC.csproj" />
   </ItemGroup>
 
 </Project>

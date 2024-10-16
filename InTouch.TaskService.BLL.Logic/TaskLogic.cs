@@ -4,12 +4,13 @@ using InTouch.Notification.Notification;
 using InTouch.SettingService.HubRegistration.Repository;
 using InTouch.SettingsServiceTasks;
 using InTouch.TaskService.BLL.Logic.Contracts;
-using InTouch.TaskService.Common.Entities;
+using UserServiceClientGrpcApp;
 using InTouch.TaskService.Common.Entities.TaskModels.Db;
 using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
 using Microsoft.Extensions.Logging;
 using InTouch.TaskService.Common.Entities.TaskModels.UpdateModels;
+using static UserServiceClientGrpcApp.UserServiceGrpc;
 
 namespace InTouch.TaskService.BLL.Logic
 {
@@ -18,6 +19,7 @@ namespace InTouch.TaskService.BLL.Logic
         private readonly ITaskRepository _taskRepository;
         private readonly INotificationLogic _notification;
         private readonly ISettingsRepository _settingsRepository;
+        private readonly UserServiceGrpcClient _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<TaskLogic> _logger;
 
@@ -25,12 +27,14 @@ namespace InTouch.TaskService.BLL.Logic
             ITaskRepository taskRepository,
             INotificationLogic notification,
             ISettingsRepository settingsRepository,
+            UserServiceGrpcClient userService,
             IMapper mapper,
             ILogger<TaskLogic> logger)
         {
             _taskRepository = taskRepository;
             _notification = notification;
             _settingsRepository = settingsRepository;
+            _userService = userService;
             _mapper = mapper;
             _logger = logger;
         }
@@ -120,12 +124,12 @@ namespace InTouch.TaskService.BLL.Logic
                 
                 if (task.Executors is null)
                 {
-                    await JoinJobMail(model.Executors, model.Name);
+                    await JoinJobMailAsync(model.Executors, model.Name);
                 }
                 else
                 {
                     var newUsers = model.Executors.Except(task.Executors);
-                    await JoinJobMail(newUsers, model.Name);
+                    await JoinJobMailAsync(newUsers, model.Name);
                 }
                 
                 await _taskRepository.UpdateAsync(model, taskId);
@@ -168,19 +172,35 @@ namespace InTouch.TaskService.BLL.Logic
         /// </summary>
         /// <param name="executors"></param>
         /// <param name="taskName"></param>
-        private async Task JoinJobMail(IEnumerable<Guid> executors, string taskName)
+        private async Task JoinJobMailAsync(IEnumerable<Guid> executors, string taskName)
         {
-            var options = await _settingsRepository.GetAsync<TaskServiceSettings>();
-            foreach (var user in executors)
+            try
             {
-                var emailMsg = new NotificationServiceMessage
+                var options = await _settingsRepository.GetAsync<TaskServiceSettings>();
+            
+                foreach (var user in executors)
                 {
-                    EmailFrom = options.ConnectionStrings.EmailFrom, 
-                    EmailTo = "valentin.lushnikov.98@mail.ru",                                     // Тут надо получить майлы пользователей из юзерсервиса(из бд, gRPC?)
-                    MessageBody = $"{DateTime.Now} Вы приступили к задаче {taskName}"
-                };
+                    var userToMail = new UserServiceRequest()
+                    {
+                        UserId = user.ToString()
+                    };
+                
+                    var emailTo = _userService.Send(userToMail);
+                
+                    var emailMsg = new NotificationServiceMessage
+                    {
+                        EmailFrom = options.ConnectionStrings.EmailFrom, 
+                        EmailTo = emailTo.Email,                                     
+                        MessageBody = $"{DateTime.Now} Вы приступили к задаче {taskName}"
+                    };
         
-                await _notification.SendAsync(emailMsg, options.Kafka.Topic);
+                    await _notification.SendAsync(emailMsg, options.Kafka.Topic);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while running JoinJobMail");
+                throw;
             }
         }
     }

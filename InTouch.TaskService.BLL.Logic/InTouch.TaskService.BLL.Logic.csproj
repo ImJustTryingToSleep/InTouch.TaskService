@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\InTouch.TaskService.BLL.Logic.Contracts\InTouch.TaskService.BLL.Logic.Contracts.csproj" />
     <ProjectReference Include="..\InTouch.TaskService.Repository\InTouch.TaskService.DAL.Repository.csproj" />
+    <ProjectReference Include="..\InTouch.TasService.BLL.gRPC\InTouch.TasService.BLL.gRPC.csproj" />
   </ItemGroup>
 
 </Project>
