@@ -23,6 +23,8 @@ namespace InTouch.TaskService.Api.Controllers
             _columnLogic = columnLogic;
         }
 
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpPost]
         [Route("create")]
         public async Task CreateAsync(Guid boardId, [FromBody] ColumnInputModel model)
@@ -30,6 +32,8 @@ namespace InTouch.TaskService.Api.Controllers
             await _columnLogic.CreateAsync(boardId, model);
         }
         
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpGet]
         [Route("get")]
         public async Task<ColumnModel> GetAsync(Guid columnId)
@@ -37,7 +41,8 @@ namespace InTouch.TaskService.Api.Controllers
             return await _columnLogic.GetAsync(columnId);
         }
         
-        
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpGet]
         [Route("getAll")]
         public async IAsyncEnumerable<ColumnModel> GetAllAsync(Guid boardId)
@@ -50,12 +55,17 @@ namespace InTouch.TaskService.Api.Controllers
             }
         }
 
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpPut]
         [Route("update")]
         public async Task UpdateAsync(Guid columnId, [FromBody] ColumnInputModel model)
         {
             await _columnLogic.UpdateAsync(columnId, model);
         }
+        
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpPost]
         [Route("delete")]
         public async Task DeleteAsync(Guid columnId)

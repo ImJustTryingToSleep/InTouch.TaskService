@@ -23,6 +23,8 @@ namespace InTouch.TaskService.Api.Controllers
             _boardLogic = boardLogic;
         }
         
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpPost]
         [Route("createBoard")]
         public async Task PostAsync([FromBody] BoardInputModel model)
@@ -30,6 +32,8 @@ namespace InTouch.TaskService.Api.Controllers
             await _boardLogic.CreateAsync(model);
         }
         
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpGet]
         [Route("getBoard")]
         public async Task<BoardModel> GetAsync(Guid id)
@@ -37,6 +41,8 @@ namespace InTouch.TaskService.Api.Controllers
             return await _boardLogic.GetTaskBoardAsync(id);
         }
         
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpPut]
         [Route("updateBoard")]
         public async Task UpdateAsync(Guid boardId, [FromBody] BoardUpdateModel model)
@@ -44,6 +50,8 @@ namespace InTouch.TaskService.Api.Controllers
             await _boardLogic.UpdateAsync(boardId, model);
         }
         
+        [Authorize]
+        [HasPermission([PermissionEnum.user])]
         [HttpDelete]
         [Route("deleteBoard")]
         public async Task DeleteAsync(Guid boardId)
