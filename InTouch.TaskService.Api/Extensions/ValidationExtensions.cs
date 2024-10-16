@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using InTouch.TaskService.Common.Entities.Validators;
-using Microsoft.AspNetCore.Identity;
 
 namespace InTouch.TaskService.Api.Extensions;
 

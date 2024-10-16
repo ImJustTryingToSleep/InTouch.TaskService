@@ -6,7 +6,6 @@ using InTouch.TaskService.Common.Entities.TaskBoards.BoardUpdateModels;
 using InTouch.TaskService.Common.Entities.TaskBoards.InputModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
 
 namespace InTouch.TaskService.Api.Controllers
 {

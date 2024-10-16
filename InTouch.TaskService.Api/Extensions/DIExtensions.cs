@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using InTouch.Notification.DI;
-using InTouch.SettingService.HubRegistration;
-using InTouch.TaskService.BLL.Logic;
-using InTouch.TaskService.BLL.Logic.Config;
+﻿using InTouch.TaskService.BLL.Logic;
 using InTouch.TaskService.BLL.Logic.Contracts;
 using InTouch.TaskService.DAL.Repository;
 using InTouch.TaskService.DAL.Repository.Contracts;

@@ -1,5 +1,4 @@
 ﻿using InTouch.TaskService.Common.Entities.TaskModels.Db;
-using InTouch.TaskService.Common.Entities.TaskModels.InputModels;
 using InTouch.TaskService.Common.Entities.TaskModels.UpdateModels;
 
 namespace InTouch.TaskService.DAL.Repository.Contracts

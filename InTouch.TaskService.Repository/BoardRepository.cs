@@ -3,7 +3,6 @@ using InTouch.TaskService.Common.Entities.TaskBoards;
 using InTouch.TaskService.Common.Entities.TaskBoards.BoardUpdateModels;
 using InTouch.TaskService.Common.Entities.TaskBoards.InputModels;
 using InTouch.TaskService.DAL.Repository.Contracts;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace InTouch.TaskService.DAL.Repository;
